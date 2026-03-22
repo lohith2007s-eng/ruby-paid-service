@@ -72,7 +72,8 @@ export default function RestaurantPage() {
                     className="btn-secondary" 
                     style={{ padding: '0.4rem 1rem', fontSize: '0.875rem' }}
                     onClick={() => {
-                       const priceNum = typeof item.price === 'number' ? item.price : parseInt(item.price.replace(/[^0-9]/g, '').slice(0,2));
+                       const priceMatch = typeof item.price === 'string' ? item.price.match(/\d+/) : null;
+                       const priceNum = typeof item.price === 'number' ? item.price : parseInt(priceMatch ? priceMatch[0] : '0');
                        addToCart({ id: item.id, name: item.name, price: priceNum });
                        alert(`Added ${item.name} to Cart!`);
                     }}
