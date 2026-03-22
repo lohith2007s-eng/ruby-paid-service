@@ -21,10 +21,10 @@ const handler = NextAuth({
   ],
   session: { strategy: 'jwt' },
   callbacks: {
-    async session({ session, token, user }) {
-      // Connect token sub to session ID
+    async session({ session, token }) {
       if (session?.user) {
         (session.user as any).id = token.sub;
+        session.user.name = token.name || 'Admin'; // Ensure name is always present
       }
       return session;
     }

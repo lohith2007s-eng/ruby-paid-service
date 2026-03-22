@@ -11,6 +11,12 @@ export default function AdminPage() {
   
   const isAdmin = session?.user?.name === 'Admin'
 
+  useEffect(() => {
+    if (session) {
+      console.log('Current Session:', session)
+    }
+  }, [session])
+
   const fetchOrders = () => {
     if (isAdmin) {
       getOrders().then(newOrders => {
@@ -93,7 +99,7 @@ export default function AdminPage() {
                       <td style={{ padding: '1rem' }}>
                         <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.875rem' }}>
                           {parsedItems.map((item: any) => (
-                            <li key={item.id}>{item.quantity}x {item.name}</li>
+                            <li key={item.id}>{item.qty || item.quantity}x {item.name}</li>
                           ))}
                         </ul>
                       </td>
