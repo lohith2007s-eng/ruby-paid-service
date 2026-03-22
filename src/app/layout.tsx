@@ -2,6 +2,11 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Image from 'next/image'
 import Link from 'next/link'
+import { CartProvider } from '@/context/CartContext'
+import { NextAuthProvider } from '@/providers/NextAuthProvider'
+import CartBadge from '@/components/CartBadge'
+import AuthButton from '@/components/AuthButton'
+import AdminLink from '@/components/AdminLink'
 
 export const metadata: Metadata = {
   title: 'Ruby Paid Service | Premium Food Delivery',
@@ -16,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <nav className="glass-panel" style={{ 
+        <NextAuthProvider>
+        <CartProvider>
+          <nav className="glass-panel" style={{ 
           position: 'fixed', top: '1rem', left: '1rem', right: '1rem', 
           zIndex: 100, display: 'flex', justifyContent: 'space-between', 
           alignItems: 'center', padding: '1rem 2rem' 
@@ -31,8 +38,9 @@ export default function RootLayout({
           <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
             <Link href="/" style={{ fontWeight: 500, transition: 'color var(--transition-fast)' }} className="nav-link">Home</Link>
             <Link href="/restaurants" style={{ fontWeight: 500, transition: 'color var(--transition-fast)' }} className="nav-link">Restaurants</Link>
-            <Link href="/checkout" style={{ fontWeight: 500, transition: 'color var(--transition-fast)' }} className="nav-link">Cart</Link>
-            <button className="btn-primary">Sign In</button>
+            <AdminLink />
+            <CartBadge />
+            <AuthButton />
           </div>
         </nav>
         
@@ -57,8 +65,16 @@ export default function RootLayout({
             <div>
               <h4 style={{ marginBottom: '1rem' }}>Contact</h4>
               <ul style={{ listStyle: 'none', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <li>support@rubypaid.com</li>
-                <li>+1 (555) 123-4567</li>
+                <li>lohith2007s@gmail.com</li>
+                <li>6361762647</li>
+              </ul>
+              
+              <h4 style={{ marginBottom: '1rem', marginTop: '2rem' }}>Developer</h4>
+              <ul style={{ listStyle: 'none', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <li style={{ color: 'var(--white)', fontWeight: 600 }}>Lohith S</li>
+                <li style={{ fontSize: '0.875rem' }}>(Full Stack Developer)</li>
+                <li>E: lohith2007s@gmail.com</li>
+                <li>P: +91 7338499165</li>
               </ul>
             </div>
           </div>
@@ -66,6 +82,8 @@ export default function RootLayout({
             © 2026 Ruby Paid Service. All rights reserved.
           </div>
         </footer>
+        </CartProvider>
+        </NextAuthProvider>
       </body>
     </html>
   )
