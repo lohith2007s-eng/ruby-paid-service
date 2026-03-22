@@ -3,7 +3,13 @@
 import prisma from '@/lib/prisma'
 
 export async function getRestaurants() {
-  return await prisma.restaurant.findMany()
+  try {
+    const restaurants = await prisma.restaurant.findMany()
+    return restaurants
+  } catch (error: any) {
+    console.error('DATABASE_ERROR [getRestaurants]:', error.message)
+    return []
+  }
 }
 
 export async function getRestaurantById(id: string) {
@@ -48,8 +54,23 @@ export async function placeOrder(email: string, total: number, items: string) {
 }
 
 export async function getOrders() {
-  return await prisma.order.findMany({
-    include: { user: true },
-    orderBy: { createdAt: 'desc' }
-  })
+  try {
+    return await prisma.order.findMany({
+      include: { user: true },
+      orderBy: { createdAt: 'desc' }
+    })
+  } catch (error: any) {
+    console.error('DATABASE_ERROR [getOrders]:', error.message)
+    return []
+  }
+}
+
+export async function testConnection() {
+  try {
+    await prisma.$connect()
+    const count = await prisma.restaurant.count()
+    return { success: true, count, message: 'Connected to Supabase!' }
+  } catch (error: any) {
+    return { success: false, message: error.message }
+  }
 }

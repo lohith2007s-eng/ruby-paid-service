@@ -9,9 +9,13 @@ export default function Home() {
   const [address, setAddress] = useState('')
   const [cuisine, setCuisine] = useState('')
   const [restaurants, setRestaurants] = useState<any[]>([])
+  const [connStatus, setConnStatus] = useState<any>(null)
 
   useEffect(() => {
-    getRestaurants().then(setRestaurants)
+    import('@/app/actions').then(actions => {
+      actions.getRestaurants().then(setRestaurants)
+      actions.testConnection().then(setConnStatus)
+    })
   }, [])
 
   return (
@@ -170,6 +174,18 @@ export default function Home() {
         </div>
       </section>
       
+      {/* Connection Status Debug (Hidden by default, fixed at bottom) */}
+      {connStatus && (
+        <div style={{
+          position: 'fixed', bottom: '1rem', right: '1rem', 
+          backgroundColor: connStatus.success ? 'rgba(0, 255, 0, 0.1)' : 'rgba(255, 0, 0, 0.1)',
+          backdropFilter: 'blur(10px)', border: `1px solid ${connStatus.success ? '#00ff00' : '#ff0000'}`,
+          padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '0.75rem', zIndex: 1000
+        }}>
+          <b>DB Status:</b> {connStatus.success ? `Connected (${connStatus.count} restaurants)` : `Error: ${connStatus.message}`}
+        </div>
+      )}
+
       <style dangerouslySetInnerHTML={{__html: `
         .restaurant-card:hover .card-image { transform: scale(1.05); }
         .restaurant-card:hover .glass-panel { border-color: rgba(255, 102, 89, 0.3); box-shadow: 0 8px 32px rgba(211, 47, 47, 0.15); }
