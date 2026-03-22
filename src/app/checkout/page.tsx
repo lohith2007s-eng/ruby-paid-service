@@ -9,6 +9,7 @@ import { placeOrder } from '@/app/actions'
 export default function CheckoutPage() {
   const [step, setStep] = useState(1)
   const [orderId, setOrderId] = useState<string | null>(null)
+  const [finalTotal, setFinalTotal] = useState<number>(0)
   const { cartItems, getCartTotal, clearCart } = useCart()
   const { data: session } = useSession()
   const isLoggedIn = true // !!session?.user
@@ -59,6 +60,7 @@ export default function CheckoutPage() {
                     if (!email) return;
                     const order = await placeOrder(email, total, JSON.stringify(cartItems));
                     setOrderId(order.id);
+                    setFinalTotal(total);
                     clearCart(); 
                     setStep(3); 
                   }}>Pay ₹{total}</button>
@@ -78,6 +80,10 @@ export default function CheckoutPage() {
                   <span style={{ color: 'var(--text-secondary)' }}>Status:</span>
                   <span style={{ color: '#FFD700', fontWeight: 'bold' }}>Preparing</span>
                 </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                  <span style={{ color: 'var(--text-secondary)' }}>Total Amount:</span>
+                  <span style={{ color: 'var(--ruby-light)', fontWeight: 'bold' }}>₹{finalTotal}</span>
+                </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ color: 'var(--text-secondary)' }}>Estimated Time:</span>
                   <span>25 Mins</span>
@@ -90,45 +96,47 @@ export default function CheckoutPage() {
           )}
         </div>
         
-        <div style={{ flex: '1 1 35%' }}>
-          <div className="glass-panel sticky" style={{ padding: '2rem', position: 'sticky', top: '7rem' }}>
-            <h2 style={{ marginBottom: '1.5rem', fontSize: '1.5rem' }}>Your Order</h2>
-            {cartItems.length === 0 ? (
-               <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>Your cart is empty.</p>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
-                {cartItems.map(item => (
-                  <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <span style={{ color: 'var(--text-secondary)' }}>{item.qty}x</span>
-                      <span>{item.name}</span>
+        {step !== 3 && (
+          <div style={{ flex: '1 1 35%' }}>
+            <div className="glass-panel sticky" style={{ padding: '2rem', position: 'sticky', top: '7rem' }}>
+              <h2 style={{ marginBottom: '1.5rem', fontSize: '1.5rem' }}>Your Order</h2>
+              {cartItems.length === 0 ? (
+                 <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>Your cart is empty.</p>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
+                  {cartItems.map(item => (
+                    <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span style={{ color: 'var(--text-secondary)' }}>{item.qty}x</span>
+                        <span>{item.name}</span>
+                      </div>
+                      <span>₹{item.price * item.qty}</span>
                     </div>
-                    <span>₹{item.price * item.qty}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-            
-            <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
-                <span>Subtotal</span>
-                <span>₹{subtotal}</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
-                <span>Delivery Partner Fee</span>
-                <span>₹{deliveryFee}</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
-                <span>Taxes</span>
-                <span>₹{taxes}</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle)', fontSize: '1.25rem', fontWeight: 600 }}>
-                <span>Total</span>
-                <span style={{ color: 'var(--ruby-light)' }}>₹{total}</span>
+                  ))}
+                </div>
+              )}
+              
+              <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
+                  <span>Subtotal</span>
+                  <span>₹{subtotal}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
+                  <span>Delivery Partner Fee</span>
+                  <span>₹{deliveryFee}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
+                  <span>Taxes</span>
+                  <span>₹{taxes}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle)', fontSize: '1.25rem', fontWeight: 600 }}>
+                  <span>Total</span>
+                  <span style={{ color: 'var(--ruby-light)' }}>₹{total}</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   )
