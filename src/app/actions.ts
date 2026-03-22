@@ -92,3 +92,15 @@ export async function testConnection() {
     return { success: false, message: error.message }
   }
 }
+
+export async function updateOrderStatus(orderId: string, status: string) {
+  try {
+    return await prisma.order.update({
+      where: { id: orderId },
+      data: { status }
+    })
+  } catch (error: any) {
+    console.error('DATABASE_ERROR [updateOrderStatus]:', error.message)
+    throw error
+  }
+}

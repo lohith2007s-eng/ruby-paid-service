@@ -1,8 +1,9 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { getOrders } from '@/app/actions'
-import { useSession } from 'next-auth/react'
+import { getOrders, updateOrderStatus } from '@/app/actions'
+import { useSession, signOut } from 'next-auth/react'
+import Link from 'next/link'
 
 export default function AdminPage() {
   const [orders, setOrders] = useState<any[]>([])
@@ -109,15 +110,29 @@ export default function AdminPage() {
                       </td>
                       <td style={{ padding: '1rem', fontWeight: 'bold' }}>₹{order.total}</td>
                       <td style={{ padding: '1rem' }}>
-                        <span style={{ 
-                          padding: '0.25rem 0.75rem', 
-                          borderRadius: '999px', 
-                          fontSize: '0.75rem',
-                          backgroundColor: order.status === 'Preparing' ? 'rgba(255, 215, 0, 0.2)' : 'rgba(76, 175, 80, 0.2)',
-                          color: order.status === 'Preparing' ? '#FFD700' : '#4CAF50'
-                        }}>
-                          {order.status}
-                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          <span style={{ 
+                            padding: '0.25rem 0.75rem', 
+                            borderRadius: '999px', 
+                            fontSize: '0.75rem',
+                            backgroundColor: order.status === 'Preparing' ? 'rgba(255, 215, 0, 0.2)' : 'rgba(76, 175, 80, 0.2)',
+                            color: order.status === 'Preparing' ? '#FFD700' : '#4CAF50'
+                          }}>
+                            {order.status}
+                          </span>
+                          {order.status === 'Preparing' && (
+                            <button 
+                              onClick={async () => {
+                                await updateOrderStatus(order.id, 'Delivered')
+                                fetchOrders()
+                              }}
+                              className="btn-secondary"
+                              style={{ padding: '0.2rem 0.5rem', fontSize: '0.65rem' }}
+                            >
+                              Delivered
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   )
