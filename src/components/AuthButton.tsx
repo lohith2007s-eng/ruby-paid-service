@@ -15,6 +15,6 @@ export default function AuthButton() {
   }
 
   return (
-    <button className="btn-primary" onClick={() => signIn()}>Admin Login</button>
+    <button className="btn-primary" onClick={() => signIn('credentials', { callbackUrl: '/admin' })}>Admin Login</button>
   )
 }

@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useCart } from '@/context/CartContext'
 import { getRestaurantById } from '@/app/actions'
+import { useSession } from 'next-auth/react'
 
 export default function RestaurantPage() {
   const params = useParams()
@@ -13,6 +14,8 @@ export default function RestaurantPage() {
   const [r, setR] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const { addToCart } = useCart()
+  const { data: session } = useSession()
+  const isAdmin = session?.user?.name === 'Admin'
 
   useEffect(() => {
     if (id) {
@@ -68,16 +71,18 @@ export default function RestaurantPage() {
                   <span style={{ fontWeight: 600, color: 'var(--white)' }}>
                     {typeof item.price === 'number' ? `₹${item.price}` : item.price}
                   </span>
-                  <button 
-                    className="btn-secondary" 
-                    style={{ padding: '0.4rem 1rem', fontSize: '0.875rem' }}
-                    onClick={() => {
-                       const priceMatch = typeof item.price === 'string' ? item.price.match(/\d+/) : null;
-                       const priceNum = typeof item.price === 'number' ? item.price : parseInt(priceMatch ? priceMatch[0] : '0');
-                       addToCart({ id: item.id, name: item.name, price: priceNum, restaurantName: r.name });
-                       alert(`Added ${item.name} to Cart!`);
-                    }}
-                  >Add</button>
+                  {!isAdmin && (
+                    <button 
+                      className="btn-secondary" 
+                      style={{ padding: '0.4rem 1rem', fontSize: '0.875rem' }}
+                      onClick={() => {
+                        const priceMatch = typeof item.price === 'string' ? item.price.match(/\d+/) : null;
+                        const priceNum = typeof item.price === 'number' ? item.price : parseInt(priceMatch ? priceMatch[0] : '0');
+                        addToCart({ id: item.id, name: item.name, price: priceNum, restaurantName: r.name });
+                        alert(`Added ${item.name} to Cart!`);
+                      }}
+                    >Add</button>
+                  )}
                 </div>
               </div>
             </div>
