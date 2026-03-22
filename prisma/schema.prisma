@@ -76,11 +76,15 @@ model VerificationToken {
 }
 
 model Order {
-  id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  status    String   @default("Preparing")
-  total     Float
-  createdAt DateTime @default(now())
-  items     String
+  id              String   @id @default(cuid())
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String
+  status          String   @default("Preparing")
+  total           Float
+  createdAt       DateTime @default(now())
+  items           String
+  customerName    String?
+  customerPhone   String?
+  deliveryAddress String?
+  restaurantName  String?
 }

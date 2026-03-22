@@ -7,11 +7,12 @@ export type CartItem = {
   name: string
   price: number
   qty: number
+  restaurantName?: string
 }
 
 type CartContextType = {
   cartItems: CartItem[]
-  addToCart: (item: { id: string, name: string, price: number }) => void
+  addToCart: (item: { id: string, name: string, price: number, restaurantName?: string }) => void
   removeFromCart: (id: string) => void
   clearCart: () => void
   getCartTotal: () => number

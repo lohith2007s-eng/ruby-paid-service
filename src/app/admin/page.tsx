@@ -69,9 +69,11 @@ export default function AdminPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead>
               <tr style={{ borderBottom: '2px solid var(--ruby)' }}>
-                <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>Order ID</th>
-                <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>Date</th>
+                <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>ID</th>
+                <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>Restaurant</th>
                 <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>Customer</th>
+                <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>Contact</th>
+                <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>Address</th>
                 <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>Items</th>
                 <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>Total</th>
                 <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>Status</th>
@@ -80,7 +82,7 @@ export default function AdminPage() {
             <tbody>
               {orders.length === 0 ? (
                 <tr>
-                  <td colSpan={6} style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                  <td colSpan={8} style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
                     No orders yet.
                   </td>
                 </tr>
@@ -93,11 +95,13 @@ export default function AdminPage() {
 
                   return (
                     <tr key={order.id} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                      <td style={{ padding: '1rem', fontFamily: 'monospace' }}>#{order.id.slice(-6).toUpperCase()}</td>
-                      <td style={{ padding: '1rem' }}>{new Date(order.createdAt).toLocaleString()}</td>
-                      <td style={{ padding: '1rem', color: 'var(--ruby-light)' }}>{order.user.phone}</td>
+                      <td style={{ padding: '1rem', fontFamily: 'monospace', fontSize: '0.75rem' }}>#{order.id.slice(-4).toUpperCase()}</td>
+                      <td style={{ padding: '1rem', fontWeight: 600, color: 'var(--ruby-light)' }}>{order.restaurantName || 'N/A'}</td>
+                      <td style={{ padding: '1rem' }}>{order.customerName || 'Guest'}</td>
+                      <td style={{ padding: '1rem' }}>{order.customerPhone || order.user?.phone || 'N/A'}</td>
+                      <td style={{ padding: '1rem', fontSize: '0.875rem', maxWidth: '200px' }}>{order.deliveryAddress || 'N/A'}</td>
                       <td style={{ padding: '1rem' }}>
-                        <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.875rem' }}>
+                        <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.75rem' }}>
                           {parsedItems.map((item: any) => (
                             <li key={item.id}>{item.qty || item.quantity}x {item.name}</li>
                           ))}

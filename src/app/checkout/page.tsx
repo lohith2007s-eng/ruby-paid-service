@@ -10,6 +10,9 @@ export default function CheckoutPage() {
   const [step, setStep] = useState(1)
   const [orderId, setOrderId] = useState<string | null>(null)
   const [finalTotal, setFinalTotal] = useState<number>(0)
+  const [customerName, setCustomerName] = useState('')
+  const [customerPhone, setCustomerPhone] = useState('')
+  const [deliveryAddress, setDeliveryAddress] = useState('')
   const { cartItems, getCartTotal, clearCart } = useCart()
   const { data: session } = useSession()
   const isLoggedIn = true // !!session?.user
@@ -39,10 +42,10 @@ export default function CheckoutPage() {
             <div className="glass-panel animate-fade-in" style={{ padding: '2rem' }}>
               <h2 style={{ marginBottom: '1.5rem', fontSize: '1.5rem' }}>Delivery Details</h2>
               <div style={{ display: 'grid', gap: '1.5rem' }}>
-                <input type="text" placeholder="Full Name" className="input-glass" />
-                <input type="text" placeholder="Phone Number" className="input-glass" />
-                <textarea placeholder="Delivery Address" className="input-glass" style={{ minHeight: '100px', resize: 'vertical' }} />
-                <button className="btn-primary" onClick={() => setStep(2)}>Continue to Payment</button>
+                <input type="text" placeholder="Full Name" className="input-glass" value={customerName} onChange={(e) => setCustomerName(e.target.value)} />
+                <input type="text" placeholder="Phone Number" className="input-glass" value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} />
+                <textarea placeholder="Delivery Address" className="input-glass" style={{ minHeight: '100px', resize: 'vertical' }} value={deliveryAddress} onChange={(e) => setDeliveryAddress(e.target.value)} />
+                <button className="btn-primary" disabled={!customerName || !customerPhone || !deliveryAddress} onClick={() => setStep(2)}>Continue to Payment</button>
               </div>
             </div>
           ) : step === 2 ? (
@@ -58,7 +61,16 @@ export default function CheckoutPage() {
                   <button className="btn-secondary" onClick={() => setStep(1)}>Back</button>
                   <button className="btn-primary" style={{ flex: 1 }} onClick={async () => { 
                     if (!email) return;
-                    const order = await placeOrder(email, total, JSON.stringify(cartItems));
+                    const restaurantName = cartItems[0]?.restaurantName || 'Unknown';
+                    const order = await placeOrder(
+                      email, 
+                      total, 
+                      JSON.stringify(cartItems), 
+                      customerName, 
+                      customerPhone, 
+                      deliveryAddress, 
+                      restaurantName
+                    );
                     setOrderId(order.id);
                     setFinalTotal(total);
                     clearCart(); 

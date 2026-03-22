@@ -74,7 +74,7 @@ export default function RestaurantPage() {
                     onClick={() => {
                        const priceMatch = typeof item.price === 'string' ? item.price.match(/\d+/) : null;
                        const priceNum = typeof item.price === 'number' ? item.price : parseInt(priceMatch ? priceMatch[0] : '0');
-                       addToCart({ id: item.id, name: item.name, price: priceNum });
+                       addToCart({ id: item.id, name: item.name, price: priceNum, restaurantName: r.name });
                        alert(`Added ${item.name} to Cart!`);
                     }}
                   >Add</button>

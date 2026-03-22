@@ -19,7 +19,15 @@ export async function getRestaurantById(id: string) {
   })
 }
 
-export async function placeOrder(email: string, total: number, items: string) {
+export async function placeOrder(
+  email: string, 
+  total: number, 
+  items: string,
+  customerName?: string,
+  customerPhone?: string,
+  deliveryAddress?: string,
+  restaurantName?: string
+) {
   const finalEmail = email || 'guest@rubyspeed.com'
   let user = await prisma.user.findUnique({ where: { email: finalEmail } })
   if (!user) {
@@ -30,7 +38,11 @@ export async function placeOrder(email: string, total: number, items: string) {
     data: {
       userId: user.id,
       total,
-      items
+      items,
+      customerName,
+      customerPhone,
+      deliveryAddress,
+      restaurantName
     }
   })
   
@@ -42,7 +54,13 @@ export async function placeOrder(email: string, total: number, items: string) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          content: `🚀 **New Order Received!**\n**Customer:** ${finalEmail}\n**Total:** ₹${total}\n**Items:** ${items}\n[View in Admin Dashboard](${process.env.NEXTAUTH_URL}/admin)`
+          content: `🚀 **New Order Received!**\n` + 
+                   `**Restaurant:** ${restaurantName || 'N/A'}\n` +
+                   `**Customer:** ${customerName || finalEmail}\n` +
+                   `**Phone:** ${customerPhone || 'N/A'}\n` +
+                   `**Address:** ${deliveryAddress || 'N/A'}\n` +
+                   `**Total:** ₹${total}\n` +
+                   `[View in Admin Dashboard](${process.env.NEXTAUTH_URL}/admin)`
         })
       })
     } catch (e) {
