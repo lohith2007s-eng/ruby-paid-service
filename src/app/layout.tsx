@@ -32,7 +32,9 @@ export default function RootLayout({
             <div style={{ width: 'var(--nav-logo-size)', height: 'var(--nav-logo-size)', borderRadius: '50%', overflow: 'hidden', position: 'relative' }}>
               <Image src="/images/ruby.jpeg" alt="[LOGO]" layout="fill" objectFit="cover" />
             </div>
-            <span style={{ fontSize: 'var(--nav-font-size)', fontWeight: 800, color: 'var(--ruby-light)', whiteSpace: 'nowrap' }}>Ruby <span style={{ color: 'var(--white)' }}>Paid Service</span></span>
+            <span style={{ fontSize: 'var(--nav-font-size)', fontWeight: 800, color: 'var(--ruby-light)', whiteSpace: 'nowrap' }}>
+              Ruby <span className="hide-on-mobile" style={{ color: 'var(--white)' }}>Paid Service</span>
+            </span>
           </Link>
           
           <div style={{ display: 'flex', gap: 'var(--nav-gap)', alignItems: 'center' }}>

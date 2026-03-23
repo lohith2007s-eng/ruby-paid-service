@@ -71,7 +71,6 @@ export default function RestaurantPage() {
                   <span style={{ fontWeight: 600, color: 'var(--white)' }}>
                     {typeof item.price === 'number' ? `₹${item.price}` : item.price}
                   </span>
-                  {!isAdmin && (
                     <button 
                       className="btn-secondary" 
                       style={{ padding: '0.4rem 1rem', fontSize: '0.875rem' }}
@@ -82,7 +81,6 @@ export default function RestaurantPage() {
                         alert(`Added ${item.name} to Cart!`);
                       }}
                     >Add</button>
-                  )}
                 </div>
               </div>
             </div>

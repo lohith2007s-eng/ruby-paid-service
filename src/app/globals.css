@@ -38,6 +38,9 @@
     --nav-logo-size: 32px;
     --nav-font-size: 0.8rem;
   }
+  .hide-on-mobile {
+    display: none;
+  }
 }
 
 * {

@@ -10,7 +10,6 @@ export default function CartBadge() {
   const { data: session } = useSession()
   const count = cartItems.reduce((acc, item) => acc + item.qty, 0)
   
-  if (session?.user?.name === 'Admin') return null
   
   return (
     <Link href="/checkout" style={{ fontWeight: 500, fontSize: 'var(--nav-font-size)', transition: 'color var(--transition-fast)', position: 'relative', display: 'flex', alignItems: 'center' }} className="nav-link">
