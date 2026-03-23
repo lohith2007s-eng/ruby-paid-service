@@ -9,7 +9,7 @@ export default function AdminPage() {
   const [orders, setOrders] = useState<any[]>([])
   const [prevCount, setPrevCount] = useState(0)
   const { data: session } = useSession()
-  
+
   const isAdmin = session?.user?.name === 'Admin'
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function AdminPage() {
     <div className="container section" style={{ marginTop: '5rem', minHeight: '80vh' }}>
       <div className="glass-panel animate-fade-in" style={{ padding: '3rem' }}>
         <h1 className="gradient-text" style={{ fontSize: '3rem', marginBottom: '2rem' }}>Admin Dashboard</h1>
-        
+
         <div style={{ display: 'flex', gap: '2rem', marginBottom: '3rem' }}>
           <div style={{ padding: '1.5rem', flex: 1, backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: '12px', border: '1px solid var(--border-subtle)' }}>
             <h3 style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '1rem' }}>Total Orders</h3>
@@ -65,7 +65,7 @@ export default function AdminPage() {
         </div>
 
         <h2 style={{ marginBottom: '1.5rem', fontSize: '1.5rem' }}>Recent Orders</h2>
-        
+
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead>
@@ -92,7 +92,7 @@ export default function AdminPage() {
                   let parsedItems = []
                   try {
                     parsedItems = JSON.parse(order.items)
-                  } catch (e) {}
+                  } catch (e) { }
 
                   return (
                     <tr key={order.id} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
@@ -111,9 +111,9 @@ export default function AdminPage() {
                       <td style={{ padding: '1rem', fontWeight: 'bold' }}>₹{order.total}</td>
                       <td style={{ padding: '1rem' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <span style={{ 
-                            padding: '0.25rem 0.75rem', 
-                            borderRadius: '999px', 
+                          <span style={{
+                            padding: '0.25rem 0.75rem',
+                            borderRadius: '999px',
                             fontSize: '0.75rem',
                             backgroundColor: order.status === 'Preparing' ? 'rgba(255, 215, 0, 0.2)' : 'rgba(76, 175, 80, 0.2)',
                             color: order.status === 'Preparing' ? '#FFD700' : '#4CAF50'
@@ -121,7 +121,7 @@ export default function AdminPage() {
                             {order.status}
                           </span>
                           {order.status === 'Preparing' && (
-                            <button 
+                            <button
                               onClick={async () => {
                                 await updateOrderStatus(order.id, 'Delivered')
                                 fetchOrders()

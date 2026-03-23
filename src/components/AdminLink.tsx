@@ -10,6 +10,6 @@ export default function AdminLink() {
   if (!isAdmin) return null
   
   return (
-    <Link href="/admin" style={{ fontWeight: 500, color: 'var(--ruby-light)', transition: 'color var(--transition-fast)' }} className="nav-link">Admin</Link>
+    <Link href="/admin" style={{ fontWeight: 500, fontSize: 'var(--nav-font-size)', color: 'var(--ruby-light)', transition: 'color var(--transition-fast)' }} className="nav-link">Admin</Link>
   )
 }

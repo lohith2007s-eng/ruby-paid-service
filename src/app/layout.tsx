@@ -26,18 +26,18 @@ export default function RootLayout({
           <nav className="glass-panel" style={{ 
           position: 'fixed', top: '1rem', left: '1rem', right: '1rem', 
           zIndex: 100, display: 'flex', justifyContent: 'space-between', 
-          alignItems: 'center', padding: '1rem 2rem' 
+          alignItems: 'center', padding: 'var(--nav-padding)' 
         }}>
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '50%', overflow: 'hidden', position: 'relative' }}>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div style={{ width: 'var(--nav-logo-size)', height: 'var(--nav-logo-size)', borderRadius: '50%', overflow: 'hidden', position: 'relative' }}>
               <Image src="/images/ruby.jpeg" alt="[LOGO]" layout="fill" objectFit="cover" />
             </div>
-            <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--ruby-light)' }}>Ruby <span style={{ color: 'var(--white)' }}>Paid Service</span></span>
+            <span style={{ fontSize: 'var(--nav-font-size)', fontWeight: 800, color: 'var(--ruby-light)', whiteSpace: 'nowrap' }}>Ruby <span style={{ color: 'var(--white)' }}>Paid Service</span></span>
           </Link>
           
-          <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-            <Link href="/" style={{ fontWeight: 500, transition: 'color var(--transition-fast)' }} className="nav-link">Home</Link>
-            <Link href="/restaurants" style={{ fontWeight: 500, transition: 'color var(--transition-fast)' }} className="nav-link">Restaurants</Link>
+          <div style={{ display: 'flex', gap: 'var(--nav-gap)', alignItems: 'center' }}>
+            <Link href="/" style={{ fontWeight: 500, fontSize: 'var(--nav-font-size)', transition: 'color var(--transition-fast)' }} className="nav-link">Home</Link>
+            <Link href="/restaurants" style={{ fontWeight: 500, fontSize: 'var(--nav-font-size)', transition: 'color var(--transition-fast)' }} className="nav-link">Restaurants</Link>
             <AdminLink />
             <CartBadge />
             <AuthButton />

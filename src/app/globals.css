@@ -15,6 +15,29 @@
   --shadow-glow: 0 8px 32px 0 rgba(211, 47, 47, 0.2);
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  --nav-padding: 1rem 2rem;
+  --nav-gap: 2rem;
+  --nav-logo-size: 48px;
+  --nav-font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --nav-padding: 0.75rem 1rem;
+    --nav-gap: 1rem;
+    --nav-logo-size: 36px;
+    --nav-font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --nav-padding: 0.5rem 0.75rem;
+    --nav-gap: 0.5rem;
+    --nav-logo-size: 32px;
+    --nav-font-size: 0.8rem;
+  }
 }
 
 * {
@@ -75,10 +98,10 @@ h3 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
 .btn-primary {
   background: linear-gradient(135deg, var(--primary-red), var(--ruby-dark));
   color: var(--white);
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1rem;
   border-radius: 50px;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: var(--nav-font-size);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
   box-shadow: var(--shadow-glow);
   display: inline-flex;
@@ -96,10 +119,10 @@ h3 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
   background: transparent;
   color: var(--white);
   border: 1px solid var(--border-subtle);
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1rem;
   border-radius: 50px;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: var(--nav-font-size);
   transition: all var(--transition-fast);
 }
 
