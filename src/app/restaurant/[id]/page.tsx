@@ -67,20 +67,54 @@ export default function RestaurantPage() {
                   <h3 style={{ fontSize: '1.125rem', marginBottom: '0.25rem' }}>{item.name}</h3>
                   <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>{item.desc}</p>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
-                  <span style={{ fontWeight: 600, color: 'var(--white)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: '1rem', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  <span style={{ fontWeight: 600, color: 'var(--white)', fontSize: '0.9rem' }}>
                     {typeof item.price === 'number' ? `₹${item.price}` : item.price}
                   </span>
-                    <button 
-                      className="btn-secondary" 
-                      style={{ padding: '0.4rem 1rem', fontSize: '0.875rem' }}
-                      onClick={() => {
-                        const priceMatch = typeof item.price === 'string' ? item.price.match(/\d+/) : null;
-                        const priceNum = typeof item.price === 'number' ? item.price : parseInt(priceMatch ? priceMatch[0] : '0');
-                        addToCart({ id: item.id, name: item.name, price: priceNum, restaurantName: r.name });
-                        alert(`Added ${item.name} to Cart!`);
-                      }}
-                    >Add</button>
+                  
+                  <div style={{ display: 'flex', gap: '0.4rem' }}>
+                    {(() => {
+                      const priceStr = String(item.price)
+                      if (priceStr.includes('|')) {
+                        return priceStr.split('|').map((part, idx) => {
+                          const labelMatch = part.match(/(Full|Half)/i)
+                          const priceMatch = part.match(/\d+/)
+                          const label = labelMatch ? labelMatch[0] : (idx === 0 ? 'Full' : 'Half')
+                          const priceNum = priceMatch ? parseInt(priceMatch[0]) : 0
+                          
+                          return (
+                            <button 
+                              key={idx}
+                              className="btn-secondary" 
+                              style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem', whiteSpace: 'nowrap' }}
+                              onClick={() => {
+                                addToCart({ 
+                                  id: `${item.id}-${label.toLowerCase()}`, 
+                                  name: `${item.name} (${label})`, 
+                                  price: priceNum, 
+                                  restaurantName: r.name 
+                                });
+                                alert(`Added ${item.name} (${label}) to Cart!`);
+                              }}
+                            >{label}</button>
+                          )
+                        })
+                      }
+                      
+                      const singlePriceMatch = priceStr.match(/\d+/)
+                      const singlePrice = singlePriceMatch ? parseInt(singlePriceMatch[0]) : 0
+                      return (
+                        <button 
+                          className="btn-secondary" 
+                          style={{ padding: '0.4rem 1rem', fontSize: '0.875rem' }}
+                          onClick={() => {
+                            addToCart({ id: item.id, name: item.name, price: singlePrice, restaurantName: r.name });
+                            alert(`Added ${item.name} to Cart!`);
+                          }}
+                        >Add</button>
+                      )
+                    })()}
+                  </div>
                 </div>
               </div>
             </div>
