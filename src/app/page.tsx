@@ -19,7 +19,7 @@ export default function Home() {
       const initialStatus = await actions.testConnection();
       setConnStatus(initialStatus);
       
-      if (initialStatus.success && initialStatus.count < 5) {
+      if (initialStatus.success && (initialStatus.count ?? 0) < 5) {
         console.log('2. Low restaurant count detected. Starting seed...');
         setConnStatus({ success: false, message: 'RESTAURANTS MISSING! Seeding database now... please wait 10s' });
         
@@ -202,15 +202,37 @@ export default function Home() {
         </div>
       </section>
       
-      {/* Connection Status Debug (Hidden by default, fixed at bottom) */}
+      {/* Connection Status & Manual Fix */}
       {connStatus && (
         <div style={{
-          position: 'fixed', bottom: '1rem', right: '1rem', 
+          position: 'fixed', bottom: '1rem', right: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem',
           backgroundColor: connStatus.success ? 'rgba(0, 255, 0, 0.1)' : 'rgba(255, 0, 0, 0.1)',
           backdropFilter: 'blur(10px)', border: `1px solid ${connStatus.success ? '#00ff00' : '#ff0000'}`,
-          padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '0.75rem', zIndex: 1000
+          padding: '1rem', borderRadius: '12px', fontSize: '0.85rem', zIndex: 1000, maxWidth: '300px'
         }}>
-          <b>DB Status:</b> {connStatus.success ? `Connected (${connStatus.count} restaurants)` : `Error: ${connStatus.message}`}
+          <div><b>DB Status:</b> {connStatus.success ? `Connected (${connStatus.count} restaurants)` : `Error: ${connStatus.message}`}</div>
+          
+          {((connStatus.count ?? 0) < 5 || !connStatus.success) && (
+            <button 
+              onClick={async () => {
+                const actions = await import('@/app/actions');
+                setConnStatus({ success: false, message: 'Updating database... please wait' });
+                const res = await actions.runSeed();
+                if (res.success) {
+                  alert('Database updated successfully! Refresh to see all restaurants.');
+                  window.location.reload();
+                } else {
+                  setConnStatus({ success: false, message: 'Update failed: ' + res.message });
+                }
+              }}
+              style={{
+                background: 'var(--primary-red)', color: 'white', border: 'none', padding: '0.5rem', 
+                borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold'
+              }}
+            >
+              Fix Missing Restaurants (Force Seed)
+            </button>
+          )}
         </div>
       )}
 
