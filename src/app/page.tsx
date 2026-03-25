@@ -12,10 +12,38 @@ export default function Home() {
   const [connStatus, setConnStatus] = useState<any>(null)
 
   useEffect(() => {
-    import('@/app/actions').then(actions => {
-      actions.getRestaurants().then(setRestaurants)
-      actions.testConnection().then(setConnStatus)
-    })
+    const init = async () => {
+      const actions = await import('@/app/actions');
+      
+      console.log('1. Checking connection...');
+      const initialStatus = await actions.testConnection();
+      setConnStatus(initialStatus);
+      
+      if (initialStatus.success && initialStatus.count < 5) {
+        console.log('2. Low restaurant count detected. Starting seed...');
+        setConnStatus({ success: false, message: 'RESTAURANTS MISSING! Seeding database now... please wait 10s' });
+        
+        const seedResult = await actions.runSeed();
+        console.log('3. Seed result:', seedResult);
+        
+        if (seedResult.success) {
+          setConnStatus({ success: true, count: 5, message: 'DATABASE UPDATED! Please refresh one last time.' });
+          const freshRestaurants = await actions.getRestaurants();
+          setRestaurants(freshRestaurants);
+        } else {
+          setConnStatus({ success: false, message: 'Seed failed: ' + seedResult.message });
+        }
+      } else {
+        console.log('2. Connection ok, count is:', initialStatus.count);
+        const currentRestaurants = await actions.getRestaurants();
+        setRestaurants(currentRestaurants);
+      }
+    };
+    
+    init().catch(err => {
+      console.error('INIT ERROR:', err);
+      setConnStatus({ success: false, message: 'Critical Error: ' + err.message });
+    });
   }, [])
 
   return (
