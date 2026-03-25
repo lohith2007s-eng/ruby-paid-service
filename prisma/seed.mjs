@@ -49,15 +49,15 @@ async function main() {
       name: 'Kalabhairavva Dry Gobi',
       rating: 4.7,
       time: '20-25 min',
-      img: '/images/dry gobi.jpg',
-      tags: 'Chinese • Spicy',
-      menu: {
-        create: [
-          { id: '3-1', name: 'Dry Gobi', price: 'Full ₹90 | Half ₹50', img: '/images/dry gobi.jpg', desc: 'Crispy fried cauliflower florets tossed in spices.' },
-          { id: '3-2', name: 'Gobi Manchurian', price: 'Full ₹90 | Half ₹50', img: '/images/gobi manchurian.jpg', desc: 'Cauliflower tossed in soy, tomato, and chili sauces.' },
-          { id: '3-3', name: 'Mushroom Pepper Dry', price: 'Full ₹130 | Half ₹70', img: '/images/mushroom_pepper_dry.jpg', desc: 'Mushrooms stir-fried with cracked black pepper.' },
-        ]
-      }
+    img: '/images/dry_gobi.jpg',
+    tags: 'Chinese • Spicy',
+    menu: {
+      create: [
+        { id: '3-1', name: 'Dry Gobi', price: 'Full ₹90 | Half ₹50', img: '/images/dry_gobi.jpg', desc: 'Crispy fried cauliflower florets tossed in spices.' },
+        { id: '3-2', name: 'Gobi Manchurian', price: 'Full ₹90 | Half ₹50', img: '/images/gobi_manchurian.jpg', desc: 'Cauliflower tossed in soy, tomato, and chili sauces.' },
+        { id: '3-3', name: 'Mushroom Pepper Dry', price: 'Full ₹130 | Half ₹70', img: '/images/mushroom_pepper_dry.jpg', desc: 'Mushrooms stir-fried with cracked black pepper.' },
+      ]
+    }
     }
   })
 
