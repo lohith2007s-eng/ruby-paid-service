@@ -1,5 +1,3 @@
-'use server'
-
 import prisma from '@/lib/prisma'
 
 export async function getRestaurants() {
@@ -20,8 +18,8 @@ export async function getRestaurantById(id: string) {
 }
 
 export async function placeOrder(
-  email: string, 
-  total: number, 
+  email: string,
+  total: number,
   items: string,
   customerName?: string,
   customerPhone?: string,
@@ -33,7 +31,7 @@ export async function placeOrder(
   if (!user) {
     user = await prisma.user.create({ data: { email: finalEmail } })
   }
-  
+
   const order = await prisma.order.create({
     data: {
       userId: user.id,
@@ -45,7 +43,7 @@ export async function placeOrder(
       restaurantName
     }
   })
-  
+
   // Notification logic
   const webhookUrl = process.env.NOTIFICATION_WEBHOOK_URL
   if (webhookUrl) {
@@ -54,20 +52,20 @@ export async function placeOrder(
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          content: `🚀 **New Order Received!**\n` + 
-                   `**Restaurant:** ${restaurantName || 'N/A'}\n` +
-                   `**Customer:** ${customerName || finalEmail}\n` +
-                   `**Phone:** ${customerPhone || 'N/A'}\n` +
-                   `**Address:** ${deliveryAddress || 'N/A'}\n` +
-                   `**Total:** ₹${total}\n` +
-                   `[View in Admin Dashboard](${process.env.NEXTAUTH_URL}/admin)`
+          content: `🚀 **New Order Received!**\n` +
+            `**Restaurant:** ${restaurantName || 'N/A'}\n` +
+            `**Customer:** ${customerName || finalEmail}\n` +
+            `**Phone:** ${customerPhone || 'N/A'}\n` +
+            `**Address:** ${deliveryAddress || 'N/A'}\n` +
+            `**Total:** ₹${total}\n` +
+            `[View in Admin Dashboard](${process.env.NEXTAUTH_URL}/admin)`
         })
       })
     } catch (e) {
       console.error('Failed to send notification:', e)
     }
   }
-  
+
   return order
 }
 
